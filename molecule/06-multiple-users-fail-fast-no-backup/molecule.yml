@@ -5,7 +5,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: instance-10
+  - name: instance-06
     image: docker.io/pycontribs/centos:8
     pre_build_image: true
 provisioner:

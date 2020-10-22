@@ -8,6 +8,8 @@ authorization_list: []
 
 # Idea for a host specific configuration 
 # Status: not yet implemented 
+# Downside: specification is on a per host basis and not global
+#
 #  - host: "restore-01"
 #    users:
 #      - name: root

@@ -24,5 +24,6 @@ scenario:
     - converge
     - idempotence
     - verify
+    - destroy
 
 ...

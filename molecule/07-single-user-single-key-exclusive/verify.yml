@@ -16,6 +16,16 @@
     with_items:
       - /root/.ssh/authorized_keys
 
+  - name: Check for jane-doe.pub
+    lineinfile: 
+      dest: "{{ item }}"
+      line: "{{ lookup('file', '../resources/public-keys/jane-doe.pub') }}"
+    check_mode: yes
+    register: jane_doe
+    failed_when: not jane_doe.changed
+    with_items:
+      - /root/.ssh/authorized_keys
+
   # bad ssh-keys
   - name: Check for bad-guy.pub
     lineinfile: 
@@ -26,7 +36,6 @@
     failed_when: not bad_guy.changed
     with_items:
       - /root/.ssh/authorized_keys
-      - /home/donald-blake/.ssh/authorized_keys
 
   # waldo
   - name: Check for waldo
@@ -44,7 +53,7 @@
   
   - name: Check if waldo's authorized_keys file exists
     stat:
-      path: "/home/waldo/.ssh/authorized_keys"
+      path: /home/waldo/.ssh/authorized_keys
     register: waldo_authorized_keys_file
 
   - name: Assert that waldo's authorized_keys does not exist
@@ -60,9 +69,8 @@
     register: backups_for_authorized_keys
     with_items:
       - /root/.ssh
-      - /home/donald-blake/.ssh
 
-  - name: Assert that no backups exist
+  - name: Assert that backups exist
     assert:
       that:
         - item.files | length > 0

@@ -1,0 +1,19 @@
+---
+
+- name: Verify
+  hosts: all
+  gather_facts: no
+  tasks:
+
+  # good ssh-keys
+  - name: Check for john-doe.pub
+    lineinfile: 
+      dest: "{{ item }}"
+      line: "{{ lookup('file', '../resources/public-keys/john-doe.pub') }}"
+    check_mode: yes
+    register: john_doe
+    failed_when: john_doe.changed
+    with_items:
+      - /root/.ssh/authorized_keys
+
+...

@@ -4,9 +4,9 @@
   hosts: all
   gather_facts: no
   tasks:
-    - name: "Include ckaserer.authorized_keys"
+    - name: Include ckaserer.authorized_keys
       include_role:
-        name: "ansible-role-authorized-keys"
+        name: ansible-role-authorized-keys
       vars:
         authorization_list:
           - name: root
@@ -15,7 +15,6 @@
               - jane-doe
         create_backup: true
         exclusive_authorized_keys: true
-        fail_when_user_not_found: true
-        select_public_keys_from_path: "molecule/resources/public-keys"
+        select_public_keys_from_path: molecule/resources/public-keys
 
 ...

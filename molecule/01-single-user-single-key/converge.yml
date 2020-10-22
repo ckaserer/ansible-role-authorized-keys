@@ -12,18 +12,8 @@
           - name: root
             ssh_keys:
               - john-doe
-              - jane-doe
-          - name: donald-blake
-            ssh_keys:
-              - john-doe
-              - jane-doe
-          - name: waldo
-            ssh_keys:
-              - john-doe
-              - jane-doe
-        create_backup: false
-        exclusive_authorized_keys: true
-        fail_when_user_not_found: false
+        create_backup: true
+        exclusive_authorized_keys: false
         select_public_keys_from_path: molecule/resources/public-keys
 
 ...

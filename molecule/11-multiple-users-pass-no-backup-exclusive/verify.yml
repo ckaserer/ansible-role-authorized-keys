@@ -56,7 +56,7 @@
   
   - name: Check if waldo's authorized_keys file exists
     stat:
-      path: "/home/waldo/.ssh/authorized_keys"
+      path: /home/waldo/.ssh/authorized_keys
     register: waldo_authorized_keys_file
 
   - name: Assert that waldo's authorized_keys does not exist

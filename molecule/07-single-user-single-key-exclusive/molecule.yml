@@ -5,10 +5,7 @@ dependency:
 driver:
   name: docker
 platforms:
-  - name: instance-01
-    image: docker.io/pycontribs/centos:8
-    pre_build_image: true
-  - name: instance-02
+  - name: instance-07
     image: docker.io/pycontribs/centos:8
     pre_build_image: true
 provisioner:
@@ -21,10 +18,12 @@ scenario:
     - syntax
     - lint
     - create
+    - prepare
     - converge
     - side_effect
     - converge
     - idempotence
     - verify
+    - destroy
 
 ...

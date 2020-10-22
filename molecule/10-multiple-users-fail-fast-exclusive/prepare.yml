@@ -8,5 +8,7 @@
     - name: Add the user donald-blake
       user:
         name: donald-blake
+        create_home: yes
+        state: present
 
 ...

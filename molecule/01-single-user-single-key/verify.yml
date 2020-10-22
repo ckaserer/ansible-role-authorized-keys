@@ -22,7 +22,7 @@
       line: "{{ lookup('file', '../resources/public-keys/jane-doe.pub') }}"
     check_mode: yes
     register: jane_doe
-    failed_when: jane_doe.changed
+    failed_when: not jane_doe.changed
     with_items:
       - /root/.ssh/authorized_keys
 
@@ -33,7 +33,7 @@
       line: "{{ lookup('file', '../resources/public-keys/bad-guy.pub') }}"
     check_mode: yes
     register: bad_guy
-    failed_when: not bad_guy.changed
+    failed_when: bad_guy.changed
     with_items:
       - /root/.ssh/authorized_keys
 
@@ -60,20 +60,5 @@
     assert:
       that:
         - not waldo_authorized_keys_file.stat.exists
-  
-  # check for backup
-  - name: Locate backups
-    find:
-      paths: /root/.ssh
-      patterns: 'authorized_keys_*.bak'
-    register: backups_for_authorized_keys
-    with_items:
-      - /root/.ssh
-
-  - name: Assert that backups exist
-    assert:
-      that:
-        - item.files | length > 0
-    with_items: "{{ backups_for_authorized_keys.results }}"
 
 ...

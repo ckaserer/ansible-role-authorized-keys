@@ -4,7 +4,7 @@
   hosts: all
   gather_facts: no
   tasks:
-    - name: Include ckaserer.authorized_keys
+    - name: Include ckaserer.authorized_key
       include_role:
         name: ansible-role-authorized-keys
       vars:
@@ -12,8 +12,6 @@
           - name: root
             ssh_keys:
               - john-doe
-        create_backup: true
-        exclusive_authorized_keys: true
         select_public_keys_from_path: molecule/resources/public-keys
 
 ...

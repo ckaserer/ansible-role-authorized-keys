@@ -25,22 +25,22 @@ install:
   - pip install -r requirements.txt
 env:
   jobs:
-    - 00-defaults
-    - 01-single-user-single-key
-    - 02-single-user-multiple-keys
-    - 03-multiple-users-pass
-    - 04-multiple-users-fail-fast
-    - 05-multiple-users-pass-no-backup
-    - 06-multiple-users-fail-fast-no-backup
-    - 07-single-user-single-key-exclusive
-    - '08-single-user-multiple-keys-exclusive'
-    - '09-multiple-users-pass-exclusive'
-    - 10-multiple-users-fail-fast-exclusive
-    - 11-multiple-users-pass-no-backup-exclusive
-    - 12-multiple-users-fail-fast-no-backup-exclusive
-    - 13-restore-latest-backup-pass
-    - 14-restore-latest-backup-fail-fast
-    - 15-restore-specific-backup-pass
-    - 16-restore-specifc-backup-fail-fast
+    - SCENARIO=00-defaults
+    - SCENARIO=01-single-user-single-key
+    - SCENARIO=02-single-user-multiple-keys
+    - SCENARIO=03-multiple-users-pass
+    - SCENARIO=04-multiple-users-fail-fast
+    - SCENARIO=05-multiple-users-pass-no-backup
+    - SCENARIO=06-multiple-users-fail-fast-no-backup
+    - SCENARIO=07-single-user-single-key-exclusive
+    - SCENARIO=08-single-user-multiple-keys-exclusive
+    - SCENARIO=09-multiple-users-pass-exclusive
+    - SCENARIO=10-multiple-users-fail-fast-exclusive
+    - SCENARIO=11-multiple-users-pass-no-backup-exclusive
+    - SCENARIO=12-multiple-users-fail-fast-no-backup-exclusive
+    - SCENARIO=13-restore-latest-backup-pass
+    - SCENARIO=14-restore-latest-backup-fail-fast
+    - SCENARIO=15-restore-specific-backup-pass
+    - SCENARIO=16-restore-specifc-backup-fail-fast
 script:
   - molecule test --scenario-name ${SCENARIO}

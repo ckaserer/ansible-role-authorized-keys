@@ -23,6 +23,7 @@
     paths: '~/.ssh'
     patterns: 'authorized_keys_*.bak'
   become_user: "{{ auth_user.name }}"
+  become: yes
   register: backups_for_authorized_keys
   when: 
     - does_user_exist.name is defined
@@ -30,12 +31,13 @@
   tags:
     - restore
 
-- name: "{{ auth_user.name }} - Select latest backup to restore from"
+- name: "{{ auth_user.name }} - Select backup to restore from"
   set_fact:
-    tmp_restore_authorized_keys_from_file: "{{ (backups_for_authorized_keys.files | sort(attribute='path') | last).path }}"
+    tmp_restore_authorized_keys_from_file: "{{ restore_authorized_keys_from_file \
+      if restore_authorized_keys_from_file is defined \
+      else (backups_for_authorized_keys.files | sort(attribute='path') | last).path }}"
   when: 
     - does_user_exist.name is defined
-    - restore_authorized_keys_from_file is not defined
   tags:
     - restore
 
@@ -53,6 +55,7 @@
     src: "{{ tmp_restore_authorized_keys_from_file }}"
     dest: "~/.ssh/authorized_keys"
   become_user: "{{ auth_user.name }}"
+  become: yes
   when:
     - does_user_exist.name is defined
   tags:

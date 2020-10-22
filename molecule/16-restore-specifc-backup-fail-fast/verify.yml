@@ -1,0 +1,111 @@
+---
+
+- name: Verify
+  hosts: all
+  gather_facts: no
+  tasks:
+
+  # good ssh-keys
+  - name: Check for john-doe.pub
+    lineinfile: 
+      dest: "{{ item }}"
+      line: "{{ lookup('file', '../resources/public-keys/john-doe.pub') }}"
+    check_mode: yes
+    register: john_doe
+    failed_when: john_doe.changed
+    with_items:
+      - /root/.ssh/authorized_keys
+      - /home/donald-blake/.ssh/authorized_keys
+
+  - name: Check for jane-doe.pub
+    lineinfile: 
+      dest: "{{ item }}"
+      line: "{{ lookup('file', '../resources/public-keys/jane-doe.pub') }}"
+    check_mode: yes
+    register: jane_doe
+    failed_when: jane_doe.changed
+    with_items:
+      - /root/.ssh/authorized_keys
+      - /home/donald-blake/.ssh/authorized_keys
+
+  # bad ssh-keys
+  - name: Check for bad-guy.pub
+    lineinfile: 
+      dest: "{{ item }}"
+      line: "{{ lookup('file', '../resources/public-keys/bad-guy.pub') }}"
+    check_mode: yes
+    register: bad_guy
+    failed_when: not bad_guy.changed
+    with_items:
+      - /root/.ssh/authorized_keys
+      - /home/donald-blake/.ssh/authorized_keys
+
+  # waldo
+  - name: Check for waldo
+    user:
+      name: waldo
+      state: present
+    changed_when: false
+    check_mode: yes
+    register: does_waldo_exist
+
+  - name: Assert that waldo could not be found
+    assert:
+      that:
+        - does_user_exist.name is not defined
+  
+  - name: Check if waldo's authorized_keys file exists
+    stat:
+      path: /home/waldo/.ssh/authorized_keys
+    register: waldo_authorized_keys_file
+
+  - name: Assert that waldo's authorized_keys does not exist
+    assert:
+      that:
+        - not waldo_authorized_keys_file.stat.exists
+    
+  # check restore for root
+  - name: Restore authorized_keys from backup for root
+    copy: 
+      remote_src: true
+      src: "~/.ssh/authorized_keys.bak"
+      dest: /root/.ssh/authorized_keys
+    check_mode: yes
+    register: authorized_keys_file_for_root
+
+  - name: Print debug information in case of failed restore for root
+    debug:
+      var: authorized_keys_file_for_root
+    when:
+      - authorized_keys_file_for_root.changed is true
+
+  - name: Backup has been restored successfully for root
+    assert:
+      that: authorized_keys_file_for_root.changed is false
+      success_msg: Backup successfully restored for root
+      fail_msg: "~/.ssh/authorized_keys.bak differs from /root/.ssh/authorized_keys"
+ 
+  # check restore for donald-blake
+  - name: Restore authorized_keys from backup for donald-blake
+    copy: 
+      remote_src: true
+      src: "~/.ssh/authorized_keys.bak"
+      dest: /home/donald-blake/.ssh/authorized_keys
+    become_user: donald-blake
+    become: yes
+    check_mode: yes
+    register: authorized_keys_file_for_donald_blake
+
+  - name: Print debug information in case of failed restore for donald-blake
+    debug:
+      var: authorized_keys_file_for_donald_blake
+    when:
+      - authorized_keys_file_for_donald_blake.changed is true
+
+  - name: Backup has been restored successfully for donald-blake
+    assert:
+      that: authorized_keys_file_for_donald_blake.changed is false
+      success_msg: Backup successfully restored for donald-blake
+      fail_msg: "~/.ssh/authorized_keys.bak differs from /root/.ssh/authorized_keys"
+
+...

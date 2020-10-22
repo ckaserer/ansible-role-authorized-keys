@@ -1,0 +1,19 @@
+---
+
+- name: Converge
+  hosts: all
+  gather_facts: no
+  tasks:
+
+    - name: Restore authorized_keys from latest Backup
+      include_role:
+        name: ansible-role-authorized-keys
+      vars:
+        authorization_list:
+          - name: root
+          - name: donald-blake
+          - name: waldo
+        restore_authorized_keys: true
+        fail_when_user_not_found: false
+
+...

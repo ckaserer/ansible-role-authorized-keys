@@ -1,0 +1,46 @@
+version: "~> 1.0"
+os: linux
+dist: xenial
+language: python
+python:
+  - '3.6'
+services:
+  - docker
+notifications:
+  email:
+    on_success: never
+    on_failure: never
+  slack:
+    if: branch = master
+    rooms:
+      secure: MZX1NAWesaDYrukKMU1Eb+6pp6FT+rFQOczO4heiuYKovInSEV5Nqw8WM3QbG6jDMLktojRGEYUx9QG7ERxfQ/1mpSapu+ASKZoOH7/9Hs4HTCxIyJ4b4+qkDk+WHt3RCaPTMs2zNXgVxVYd8/Qh1Wg1wb+7Dh1LbucPkPDj7vWCPjjY/sMbVV2qNDoUnRxXXkjbjQRsCKF455Fy6T1LctWTY5wsBwxGZEkNOrqqcTN0Tr8KdJKPPkur+hIK7ZPuE/mTaI4uLs1b+7e4N3UnARkcYESgm+nf2YDMpBTOh5vXNIxnDTmcZ/7drYm7n6J+vW3zZWhx7Tp9x3Yo7cPwoSl72UrxK8NeVVh8KNb6PR7nhSJ0LthnbIiYmSPlIB1VMXFL6uvyOAVdvxobGYM+VoZis4WpNS1LKp//10MXigly9EHxAuWZecCvTy7pbBCMUK3tMLBIe6QGzP+F06tATjdBOpJHP9cvsQ/PsrYuhP9O4IhfhpN4G5usr+HczgFntjtj8NKrgWWt0kD5nlAbSwSocwNWmmT0/SjnwRC1UHPmgGL//bgwtvuGSlRymatNQFlYUWie+KRhKEcV+J/YHp0fdp4jGjHr95b4UudLdf1b2Tp1YoLMRQ1iAChW8+gh0dxSvOndCzPjihhFEW5gc9lv9l0lpj/hcY6cJzW2YM4=
+    template:
+    - "%{commit_subject}"
+    - build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) @%{branch}
+    - by %{author} %{result} in %{duration}
+    on_success: change
+    on_failure: always
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+install:
+  - pip install -r requirements.txt
+env:
+  jobs:
+    - 00-defaults
+    - 01-single-user-single-key
+    - 02-single-user-multiple-keys
+    - 03-multiple-users-pass
+    - 04-multiple-users-fail-fast
+    - 05-multiple-users-pass-no-backup
+    - 06-multiple-users-fail-fast-no-backup
+    - 07-single-user-single-key-exclusive
+    - '08-single-user-multiple-keys-exclusive'
+    - '09-multiple-users-pass-exclusive'
+    - 10-multiple-users-fail-fast-exclusive
+    - 11-multiple-users-pass-no-backup-exclusive
+    - 12-multiple-users-fail-fast-no-backup-exclusive
+    - 13-restore-latest-backup-pass
+    - 14-restore-latest-backup-fail-fast
+    - 15-restore-specific-backup-pass
+    - 16-restore-specifc-backup-fail-fast
+script:
+  - molecule test --scenario-name ${SCENARIO}

@@ -13,7 +13,7 @@
 - name: "{{ auth_user.name }} - Add user to list of none existing users"
   set_fact:
     users_not_found: "{{ users_not_found | default([]) + ['User '+auth_user.name+' not found'] }}"
-  when: 
+  when:
     - does_user_exist.name is not defined
   tags:
     - authorized_keys
@@ -45,7 +45,7 @@
     - authorized_keys
 
 - name: "{{ auth_user.name }} - Create authorized_keys backup"
-  copy: 
+  copy:
     remote_src: true
     src: "~/.ssh/authorized_keys"
     dest: "~/.ssh/authorized_keys_{{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S') }}.bak"

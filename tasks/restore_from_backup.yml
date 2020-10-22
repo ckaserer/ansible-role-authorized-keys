@@ -13,7 +13,7 @@
 - name: "{{ auth_user.name }} - Add user to list of none existing users"
   set_fact:
     users_not_found: "{{ users_not_found | default([]) + ['User '+auth_user.name+' not found'] }}"
-  when: 
+  when:
     - does_user_exist.name is not defined
   tags:
     - restore
@@ -25,7 +25,7 @@
   become_user: "{{ auth_user.name }}"
   become: yes
   register: backups_for_authorized_keys
-  when: 
+  when:
     - does_user_exist.name is defined
     - restore_authorized_keys_from_file is not defined
   tags:
@@ -36,7 +36,7 @@
     tmp_restore_authorized_keys_from_file: "{{ restore_authorized_keys_from_file \
       if restore_authorized_keys_from_file is defined \
       else (backups_for_authorized_keys.files | sort(attribute='path') | last).path }}"
-  when: 
+  when:
     - does_user_exist.name is defined
   tags:
     - restore
@@ -50,10 +50,11 @@
     - restore
 
 - name: "{{ auth_user.name }} - Restore authorized_keys from backup"
-  copy: 
+  copy:
     remote_src: true
     src: "{{ tmp_restore_authorized_keys_from_file }}"
     dest: "~/.ssh/authorized_keys"
+    mode: "0600"
   become_user: "{{ auth_user.name }}"
   become: yes
   when:

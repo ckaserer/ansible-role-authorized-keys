@@ -25,5 +25,8 @@ scenario:
     - idempotence
     - verify
     - destroy
+lint: |
+  set -e
+  ansible-lint .
 
 ...

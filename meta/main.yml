@@ -1,24 +1,35 @@
 ---
 
 galaxy_info:
+  role_name: authorized_keys
   author: Clemens Kaserer
   description: Manage authorized_keys file on Linux Systems
   company: Gepardec IT Services GmbH
-
   license: GPLv3
 
   min_ansible_version: 2.1
 
-  # platforms:
-  # - name: Fedora
-  #   versions:
-  #   - all
-  #   - 25
+  platforms:
+    - name: EL
+      versions:
+        - 6
+        - 7
+        - 8
+    - name: Ubuntu
+      versions:
+        - bionic
+        - focal
+        - xenial
+    - name: GenericLinux
+      versions:
+        - any
 
   galaxy_tags:
-    - authorized_keys
+    - authorizedkeys
     - ssh
-    
+    - remote
+    - linux
+
 dependencies: []
 
 ...

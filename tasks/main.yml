@@ -1,0 +1,33 @@
+---
+
+- name: Include tasks to roll out authorized_keys
+  include_tasks: authorized_keys.yml
+  loop_control:
+    loop_var: auth_user
+  with_items: "{{ authorization_list }}"
+  when: 
+    - not restore_authorized_keys
+  tags:
+    - always
+
+- name: Include tasks to restore authorized_keys from backup
+  include_tasks: restore_from_backup.yml
+  loop_control:
+    loop_var: auth_user
+  with_items: "{{ authorization_list }}"
+  when: 
+    - restore_authorized_keys
+  tags:
+    - always
+
+- name: List users that are set in the authorization_list but do not exist
+  debug:
+    msg: "{{ users_not_found }}"
+  when: 
+    - users_not_found is defined
+  failed_when:
+    - fail_when_user_not_found
+  tags:
+    - always
+    
+...

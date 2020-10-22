@@ -1,0 +1,12 @@
+---
+
+- name: Prepare
+  hosts: all
+  gather_facts: no
+  tasks:
+
+    - name: Add the user donald-blake
+      user:
+        name: donald-blake
+
+...

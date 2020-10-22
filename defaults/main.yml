@@ -1,0 +1,29 @@
+---
+
+authorization_list: []
+#  - name: root  
+#    ssh_keys:
+#      - doe-jane
+#      - doe-john
+
+# Idea for a host specific configuration 
+# Status: not yet implemented 
+#  - host: "restore-01"
+#    users:
+#      - name: root
+#        ssh_keys:
+#          - doe-jane
+#          - doe-john
+
+create_backup: true
+
+exclusive_authorized_keys: false
+
+fail_when_user_not_found: true
+
+restore_authorized_keys: false
+# restore_authorized_keys_from_file: "/root/.ssh/authorized_keys.bak"
+
+select_public_keys_from_path: "./public-keys"
+
+...

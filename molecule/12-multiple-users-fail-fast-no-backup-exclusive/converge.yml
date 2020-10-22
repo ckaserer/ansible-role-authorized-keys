@@ -1,0 +1,43 @@
+---
+
+- name: Converge
+  hosts: all
+  gather_facts: no
+  tasks:
+
+    - block:
+        - name: "Include ckaserer.authorized_keys"
+          include_role:
+            name: "ansible-role-authorized-keys"
+          vars:
+            authorization_list:
+              - name: root
+                ssh_keys:
+                  - john-doe
+                  - jane-doe
+              - name: donald-blake
+                ssh_keys:
+                  - john-doe
+                  - jane-doe
+              - name: waldo
+                ssh_keys:
+                  - john-doe
+                  - jane-doe
+            create_backup: false
+            exclusive_authorized_keys: true
+            fail_when_user_not_found: true
+            select_public_keys_from_path: "molecule/resources/public-keys"
+          register: expected_failure
+
+        - name: "Check execution halted"
+          fail:
+            msg: "Execution should stop before this task"
+          register: should_not_run
+    
+      rescue:
+        - assert:
+            that:
+              - expected_failure is defined
+              - should_not_run is not defined
+
+...

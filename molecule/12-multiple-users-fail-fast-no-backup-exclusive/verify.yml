@@ -1,0 +1,83 @@
+---
+
+- name: Verify
+  hosts: all
+  gather_facts: no
+  tasks:
+
+  # good ssh-keys
+  - name: Check for john-doe.pub
+    lineinfile: 
+      dest: "{{ item }}"
+      line: "{{ lookup('file', '../resources/public-keys/john-doe.pub') }}"
+    check_mode: yes
+    register: john_doe
+    failed_when: john_doe.changed
+    with_items:
+      - /root/.ssh/authorized_keys
+      - /home/donald-blake/.ssh/authorized_keys
+
+  - name: Check for jane-doe.pub
+    lineinfile: 
+      dest: "{{ item }}"
+      line: "{{ lookup('file', '../resources/public-keys/jane-doe.pub') }}"
+    check_mode: yes
+    register: jane_doe
+    failed_when: jane_doe.changed
+    with_items:
+      - /root/.ssh/authorized_keys
+      - /home/donald-blake/.ssh/authorized_keys
+
+  # bad ssh-keys
+  - name: Check for bad-guy.pub
+    lineinfile: 
+      dest: "{{ item }}"
+      line: "{{ lookup('file', '../resources/public-keys/bad-guy.pub') }}"
+    check_mode: yes
+    register: bad_guy
+    failed_when: not bad_guy.changed
+    with_items:
+      - /root/.ssh/authorized_keys
+      - /home/donald-blake/.ssh/authorized_keys
+
+  # waldo
+  - name: Check for waldo
+    user:
+      name: waldo
+      state: present
+    changed_when: false
+    check_mode: yes
+    register: does_waldo_exist
+
+  - name: Assert that waldo could not be found
+    assert:
+      that:
+        - does_user_exist.name is not defined
+  
+  - name: Check if waldo's authorized_keys file exists
+    stat:
+      path: "/home/waldo/.ssh/authorized_keys"
+    register: waldo_authorized_keys_file
+
+  - name: Assert that waldo's authorized_keys does not exist
+    assert:
+      that:
+        - not waldo_authorized_keys_file.stat.exists
+  
+  # check for backup
+  - name: Locate backups
+    find:
+      paths: /root/.ssh
+      patterns: 'authorized_keys_*.bak'
+    register: backups_for_authorized_keys
+    with_items:
+      - /root/.ssh
+      - /home/donald-blake/.ssh
+
+  - name: Assert that no backups exist
+    assert:
+      that:
+        - item.files | length == 0
+    with_items: "{{ backups_for_authorized_keys.results }}"
+
+...

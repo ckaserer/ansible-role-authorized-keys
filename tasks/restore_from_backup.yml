@@ -1,0 +1,61 @@
+---
+
+- name: "{{ auth_user.name }} - Check if user exists"
+  user:
+    name: "{{ auth_user.name }}"
+    state: present
+  changed_when: false
+  check_mode: yes
+  register: does_user_exist
+  tags:
+    - restore
+
+- name: "{{ auth_user.name }} - Add user to list of none existing users"
+  set_fact:
+    users_not_found: "{{ users_not_found | default([]) + ['User '+auth_user.name+' not found'] }}"
+  when: 
+    - does_user_exist.name is not defined
+  tags:
+    - restore
+
+- name: "{{ auth_user.name }} - Locate Backups"
+  find:
+    paths: '~/.ssh'
+    patterns: 'authorized_keys_*.bak'
+  become_user: "{{ auth_user.name }}"
+  register: backups_for_authorized_keys
+  when: 
+    - does_user_exist.name is defined
+    - restore_authorized_keys_from_file is not defined
+  tags:
+    - restore
+
+- name: "{{ auth_user.name }} - Select latest backup to restore from"
+  set_fact:
+    tmp_restore_authorized_keys_from_file: "{{ (backups_for_authorized_keys.files | sort(attribute='path') | last).path }}"
+  when: 
+    - does_user_exist.name is defined
+    - restore_authorized_keys_from_file is not defined
+  tags:
+    - restore
+
+- name: "{{ auth_user.name }} - List backup to restore from"
+  debug:
+    msg: "Restoring from {{ tmp_restore_authorized_keys_from_file }}"
+  when:
+    - does_user_exist.name is defined
+  tags:
+    - restore
+
+- name: "{{ auth_user.name }} - Restore authorized_keys from backup"
+  copy: 
+    remote_src: true
+    src: "{{ tmp_restore_authorized_keys_from_file }}"
+    dest: "~/.ssh/authorized_keys"
+  become_user: "{{ auth_user.name }}"
+  when:
+    - does_user_exist.name is defined
+  tags:
+    - restore
+
+...

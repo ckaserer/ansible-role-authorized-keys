@@ -1,0 +1,75 @@
+---
+
+- name: "{{ auth_user.name }} - Check if user exists"
+  user:
+    name: "{{ auth_user.name }}"
+    state: present
+  changed_when: false
+  check_mode: yes
+  register: does_user_exist
+  tags:
+    - authorized_keys
+
+- name: "{{ auth_user.name }} - Add user to list of none existing users"
+  set_fact:
+    users_not_found: "{{ users_not_found | default([]) + ['User '+auth_user.name+' not found'] }}"
+  when: 
+    - does_user_exist.name is not defined
+  tags:
+    - authorized_keys
+
+- name: "{{ auth_user.name }} - Check if authorized_keys file exists"
+  stat:
+    path: "~/.ssh/authorized_keys"
+  become_user: "{{ auth_user.name }}"
+  register: authorized_keys_file
+  when:
+    - create_backup
+    - does_user_exist.name is defined
+  tags:
+    - authorized_keys
+
+- name: "{{ auth_user.name }} - Check if changes to authorized_keys are required"
+  authorized_key:
+    user: "{{ auth_user.name }}"
+    state: present
+    key: "{{ lookup('template', 'authorized_keys.j2') }}"
+    exclusive: "{{ exclusive_authorized_keys }}"
+  check_mode: yes
+  register: check_authorized_keys_for_changes
+  when:
+    - create_backup
+    - does_user_exist.name is defined
+  tags:
+    - authorized_keys
+
+- name: "{{ auth_user.name }} - Create authorized_keys backup"
+  copy: 
+    remote_src: true
+    src: "~/.ssh/authorized_keys"
+    dest: "~/.ssh/authorized_keys_{{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S') }}.bak"
+    mode: "0600"
+    owner: "{{ auth_user.name }}"
+    group: "{{ auth_user.name }}"
+  become_user: "{{ auth_user.name }}"
+  when:
+    - create_backup
+    - check_authorized_keys_for_changes.changed
+    - authorized_keys_file.stat.exists
+    - does_user_exist.name is defined
+  tags:
+    - authorized_keys
+
+- name: "{{ auth_user.name }} - Update authorized_keys"
+  authorized_key:
+    user: "{{ auth_user.name }}"
+    state: present
+    key: "{{ lookup('template', 'authorized_keys.j2') }}"
+    exclusive: "{{ exclusive_authorized_keys }}"
+  register: check_for_user_not_found
+  when:
+    - does_user_exist.name is defined
+  tags:
+    - authorized_keys
+
+...

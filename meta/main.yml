@@ -1,25 +1,20 @@
 ---
-
 galaxy_info:
   role_name: authorized_keys
-  author: Clemens Kaserer
+  namespace: ckaserer
+  author: ckaserer
   description: Manage authorized_keys file on Linux Systems
-  company: Gepardec IT Services GmbH
   license: GPLv3
 
-  min_ansible_version: 2.1
+  min_ansible_version: 3.0
 
   platforms:
-    - name: EL
-      versions:
-        - 6
-        - 7
-        - 8
     - name: Ubuntu
       versions:
-        - bionic
         - focal
-        - xenial
+    - name: Debian
+      versions:
+        - buster
     - name: GenericLinux
       versions:
         - any
@@ -31,5 +26,4 @@ galaxy_info:
     - linux
 
 dependencies: []
-
 ...

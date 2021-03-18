@@ -1,5 +1,4 @@
 ---
-
 authorization_list: []
 #  - name: root  
 #    ssh_keys:
@@ -27,5 +26,4 @@ restore_authorized_keys: false
 # restore_authorized_keys_from_file: "~/.ssh/authorized_keys.bak"
 
 select_public_keys_from_path: "./public-keys"
-
 ...

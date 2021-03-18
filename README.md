@@ -1,4 +1,4 @@
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ckaserer/ansible-role-dhcp/CI?style=flat-square)](https://github.com/ckaserer/ansible-role-dhcp/actions?query=workflow%3ACI) ![gplv3](https://img.shields.io/badge/license-GPL%20v3.0-brightgreen.svg?style=flat-square) ![Maintenance](https://img.shields.io/maintenance/yes/2021?style=flat-square)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ckaserer/ansible-role-authorized-keys/CI?style=flat-square)](https://github.com/ckaserer/ansible-role-authorized-keys/actions?query=workflow%3ACI) ![gplv3](https://img.shields.io/badge/license-GPL%20v3.0-brightgreen.svg?style=flat-square) ![Maintenance](https://img.shields.io/maintenance/yes/2021?style=flat-square)
 
 # ckaserer.authorized_keys
 

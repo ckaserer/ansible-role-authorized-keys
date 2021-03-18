@@ -1,5 +1,4 @@
 ---
-
 - name: Verify
   hosts: all
   gather_facts: no
@@ -79,5 +78,4 @@
       that:
         - item.files | length == 0
     with_items: "{{ backups_for_authorized_keys.results }}"
-
 ...

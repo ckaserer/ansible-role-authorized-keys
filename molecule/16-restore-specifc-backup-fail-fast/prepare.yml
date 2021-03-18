@@ -1,5 +1,4 @@
 ---
-
 - name: Prepare
   hosts: all
   gather_facts: no
@@ -13,7 +12,7 @@
 
     - name: Set authorized_keys
       include_role:
-        name: ansible-role-authorized-keys
+        name: ckaserer.authorized_keys
       vars:
         authorization_list:
           - name: root
@@ -29,7 +28,7 @@
 
     - name: Set additional authorized_keys and create a backup
       include_role:
-        name: ansible-role-authorized-keys
+        name: ckaserer.authorized_keys
       vars:
         authorization_list:
           - name: root
@@ -54,5 +53,4 @@
       with_items:
       - /root/.ssh
       - /home/donald-blake/.ssh
-
 ...

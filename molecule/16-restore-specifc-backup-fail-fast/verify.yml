@@ -1,5 +1,4 @@
 ---
-
 - name: Verify
   hosts: all
   gather_facts: no
@@ -107,5 +106,4 @@
       that: authorized_keys_file_for_donald_blake.changed is false
       success_msg: Backup successfully restored for donald-blake
       fail_msg: "~/.ssh/authorized_keys.bak differs from /root/.ssh/authorized_keys"
-
 ...

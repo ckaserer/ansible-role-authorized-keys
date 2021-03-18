@@ -12,5 +12,4 @@
       become_user: "{{ item }}"
       with_items:
         - root
-
 ...

@@ -1,5 +1,4 @@
 ---
-
 - name: Side-Effect
   hosts: all
   gather_facts: no
@@ -15,5 +14,4 @@
       with_items:
         - root
         - donald-blake
-
 ...

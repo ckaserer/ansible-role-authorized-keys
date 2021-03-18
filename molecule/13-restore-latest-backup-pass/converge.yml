@@ -1,5 +1,4 @@
 ---
-
 - name: Converge
   hosts: all
   gather_facts: no
@@ -7,7 +6,7 @@
 
     - name: Restore authorized_keys from latest Backup
       include_role:
-        name: ansible-role-authorized-keys
+        name: ckaserer.authorized_keys
       vars:
         authorization_list:
           - name: root
@@ -15,5 +14,4 @@
           - name: waldo
         restore_authorized_keys: true
         fail_when_user_not_found: false
-
 ...

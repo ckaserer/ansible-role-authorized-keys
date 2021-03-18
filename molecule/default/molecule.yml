@@ -18,19 +18,6 @@ provisioner:
   name: ansible
 verifier:
   name: ansible
-scenario:
-  test_sequence:
-    - destroy
-    - syntax
-    - lint
-    - create
-    - prepare
-    - converge
-    - side_effect
-    - converge
-    - idempotence
-    - verify
-    - destroy
 lint: |
   set -e
   ansible-lint .

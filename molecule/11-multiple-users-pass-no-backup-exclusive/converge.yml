@@ -1,12 +1,11 @@
 ---
-
 - name: Converge
   hosts: all
   gather_facts: no
   tasks:
     - name: Include ckaserer.authorized_keys
       include_role:
-        name: ansible-role-authorized-keys
+        name: ckaserer.authorized_keys
       vars:
         authorization_list:
           - name: root
@@ -25,5 +24,4 @@
         exclusive_authorized_keys: true
         fail_when_user_not_found: false
         select_public_keys_from_path: molecule/resources/public-keys
-
 ...

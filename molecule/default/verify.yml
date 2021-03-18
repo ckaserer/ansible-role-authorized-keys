@@ -1,5 +1,4 @@
 ---
-
 - name: Verify
   hosts: all
   gather_facts: no
@@ -15,5 +14,4 @@
     failed_when: john_doe.changed
     with_items:
       - /root/.ssh/authorized_keys
-
 ...

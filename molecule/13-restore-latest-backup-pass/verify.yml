@@ -1,5 +1,4 @@
 ---
-
 - name: Verify
   hosts: all
   gather_facts: no
@@ -136,5 +135,4 @@
       that: authorized_keys_file_for_donald_blake.changed is false
       success_msg: Backup successfully restored for donald-blake
       fail_msg: "{{ tmp_restore_authorized_keys_for_donald_blake_from_file }} differs from /root/.ssh/authorized_keys"
-
 ...

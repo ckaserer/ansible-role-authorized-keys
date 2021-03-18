@@ -1,13 +1,19 @@
 ---
-
 dependency:
   name: galaxy
 driver:
   name: docker
 platforms:
-  - name: instance-11
-    image: docker.io/pycontribs/centos:8
+  - name: instance
+    image: "geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu2004}-ansible:latest"
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    privileged: yes
     pre_build_image: true
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup
 provisioner:
   name: ansible
 verifier:
@@ -28,5 +34,4 @@ scenario:
 lint: |
   set -e
   ansible-lint .
-
 ...
